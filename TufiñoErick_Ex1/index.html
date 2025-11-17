@@ -54,7 +54,7 @@
     <h1>Truck Management System - Find Trucks</h1>
     
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search by make, model, year, capacity, or status...">
+        <input type="text" id="search-input" placeholder="Search by ID, make, or model...">
         <button onclick="searchTrucks()">Search</button>
     </div>
     
@@ -124,11 +124,9 @@
             }
             
             const filtered = allTrucks.filter(truck => {
-                return truck.make.toLowerCase().includes(searchTerm) ||
-                       truck.model.toLowerCase().includes(searchTerm) ||
-                       truck.year.toString().includes(searchTerm) ||
-                       truck.capacity.toString().includes(searchTerm) ||
-                       truck.status.toLowerCase().includes(searchTerm);
+                return truck.id.toString().includes(searchTerm) ||
+                       truck.make.toLowerCase().includes(searchTerm) ||
+                       truck.model.toLowerCase().includes(searchTerm);
             });
             
             displayTrucks(filtered);
