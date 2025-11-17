@@ -5,6 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Truck Management</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .search-container button:hover {
+            background-color: #45a049;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -16,10 +43,22 @@
         th {
             background-color: #f2f2f2;
         }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <h1>Truck Management System</h1>
+    <h1>Truck Management System - Find Trucks</h1>
+    
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by make, model, year, capacity, or status...">
+        <button onclick="searchTrucks()">Search</button>
+        <button onclick="showAllTrucks()">Show All</button>
+    </div>
+    
     <table>
         <thead>
             <tr>
@@ -39,25 +78,78 @@
     <script>
         // URL de MockAPI
         const API_URL = 'https://691b419f2d8d7855757230ac.mockapi.io/Trucks';
+        let allTrucks = [];
         
-        fetch(API_URL)
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('truck-data');
-                data.forEach(truck => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${truck.id}</td>
-                        <td>${truck.make}</td>
-                        <td>${truck.model}</td>
-                        <td>${truck.year}</td>
-                        <td>${truck.capacity}</td>
-                        <td>${truck.status}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
+        // Cargar todos los camiones al inicio
+        function loadTrucks() {
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    allTrucks = data;
+                    displayTrucks(allTrucks);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+        
+        // Mostrar camiones en la tabla
+        function displayTrucks(trucks) {
+            const tableBody = document.getElementById('truck-data');
+            tableBody.innerHTML = ''; // Limpiar tabla
+            
+            if (trucks.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="no-results">No trucks found</td></tr>';
+                return;
+            }
+            
+            trucks.forEach(truck => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${truck.id}</td>
+                    <td>${truck.make}</td>
+                    <td>${truck.model}</td>
+                    <td>${truck.year}</td>
+                    <td>${truck.capacity}</td>
+                    <td>${truck.status}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // Buscar camiones
+        function searchTrucks() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                displayTrucks(allTrucks);
+                return;
+            }
+            
+            const filtered = allTrucks.filter(truck => {
+                return truck.make.toLowerCase().includes(searchTerm) ||
+                       truck.model.toLowerCase().includes(searchTerm) ||
+                       truck.year.toString().includes(searchTerm) ||
+                       truck.capacity.toString().includes(searchTerm) ||
+                       truck.status.toLowerCase().includes(searchTerm);
+            });
+            
+            displayTrucks(filtered);
+        }
+        
+        // Mostrar todos los camiones
+        function showAllTrucks() {
+            document.getElementById('search-input').value = '';
+            displayTrucks(allTrucks);
+        }
+        
+        // Permitir búsqueda con Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchTrucks();
+                }
+            });
+            loadTrucks();
+        });
     </script>
 </body>
 </html>
