@@ -79,7 +79,7 @@
         const API_URL = 'https://691b419f2d8d7855757230ac.mockapi.io/Trucks';
         let allTrucks = [];
         
-        // Cargar todos los camiones al inicio (pero no mostrarlos)
+        
         function loadTrucks() {
             fetch(API_URL)
                 .then(response => response.json())
@@ -89,10 +89,10 @@
                 .catch(error => console.error('Error fetching data:', error));
         }
         
-        // Mostrar camiones en la tabla
+      
         function displayTrucks(trucks) {
             const tableBody = document.getElementById('truck-data');
-            tableBody.innerHTML = ''; // Limpiar tabla
+            tableBody.innerHTML = ''; 
             
             if (trucks.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="6" class="no-results">No trucks found</td></tr>';
@@ -113,7 +113,7 @@
             });
         }
         
-        // Buscar camiones
+       
         function searchTrucks() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
             
@@ -132,14 +132,14 @@
             displayTrucks(filtered);
         }
         
-        // Permitir búsqueda con Enter
+        
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('search-input').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchTrucks();
                 }
             });
-            loadTrucks(); // Cargar datos pero no mostrarlos
+            loadTrucks(); 
         });
     </script>
 </body>
