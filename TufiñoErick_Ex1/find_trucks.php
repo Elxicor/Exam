@@ -1,13 +1,15 @@
 <?php
 header('Content-Type: application/json');
 
-$host = 'localhost'; 
-$dbname = 'truck_management'; 
-$username = 'root'; 
-$password = 'admin123'; 
+// Usar variables de entorno de Railway (o valores locales por defecto)
+$host = getenv('MYSQLHOST') ?: 'localhost'; 
+$port = getenv('MYSQLPORT') ?: '3306';
+$dbname = getenv('MYSQLDATABASE') ?: 'truck_management'; 
+$username = getenv('MYSQLUSER') ?: 'root'; 
+$password = getenv('MYSQLPASSWORD') ?: 'admin123'; 
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     $sql = "SELECT id, make, model, year, capacity, status FROM trucks";

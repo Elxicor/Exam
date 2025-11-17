@@ -37,8 +37,10 @@
     </table>
 
     <script>
+        // URL de MockAPI
+        const API_URL = 'https://691b419f2d8d785575723dac.mockapi.io/trucks';
         
-        fetch('find_trucks.php')
+        fetch(API_URL)
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.getElementById('truck-data');
