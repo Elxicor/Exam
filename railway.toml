@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "echo 'No build needed'"
+
+[deploy]
+startCommand = "php -S 0.0.0.0:$PORT -t TufiñoErick_Ex1"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
