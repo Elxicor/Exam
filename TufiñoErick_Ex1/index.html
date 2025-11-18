@@ -54,7 +54,7 @@
     <h1>Truck Management System - Find Trucks</h1>
     
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search by ID, make, or model...">
+        <input type="text" id="search-input" placeholder="Search by make or model...">
         <button onclick="searchTrucks()">Search</button>
     </div>
     
@@ -120,8 +120,7 @@
                 .then(response => response.json())
                 .then(data => {
                     const filtered = data.filter(truck => {
-                        return truck.id.toString().toLowerCase().includes(searchTerm) ||
-                               truck.make.toLowerCase().includes(searchTerm) ||
+                        return truck.make.toLowerCase().includes(searchTerm) ||
                                truck.model.toLowerCase().includes(searchTerm);
                     });
                     displayTrucks(filtered);
