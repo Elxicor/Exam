@@ -77,19 +77,8 @@
     <script>
         // URL de MockAPI
         const API_URL = 'https://691b419f2d8d7855757230ac.mockapi.io/Trucks';
-        let allTrucks = [];
         
-        
-        function loadTrucks() {
-            fetch(API_URL)
-                .then(response => response.json())
-                .then(data => {
-                    allTrucks = data;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }
-        
-      
+        // Mostrar camiones en la tabla
         function displayTrucks(trucks) {
             const tableBody = document.getElementById('truck-data');
             tableBody.innerHTML = ''; 
@@ -113,23 +102,34 @@
             });
         }
         
-       
+        // Buscar camiones
         function searchTrucks() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+            const tableBody = document.getElementById('truck-data');
             
             if (searchTerm === '') {
-                const tableBody = document.getElementById('truck-data');
                 tableBody.innerHTML = '<tr><td colspan="6" class="no-results">Please enter a search term</td></tr>';
                 return;
             }
             
-            const filtered = allTrucks.filter(truck => {
-                return truck.id.toString().includes(searchTerm) ||
-                       truck.make.toLowerCase().includes(searchTerm) ||
-                       truck.model.toLowerCase().includes(searchTerm);
-            });
+            // Mostrar mensaje de carga
+            tableBody.innerHTML = '<tr><td colspan="6" class="no-results">Searching...</td></tr>';
             
-            displayTrucks(filtered);
+            // Buscar en la API
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const filtered = data.filter(truck => {
+                        return truck.id.toString().toLowerCase().includes(searchTerm) ||
+                               truck.make.toLowerCase().includes(searchTerm) ||
+                               truck.model.toLowerCase().includes(searchTerm);
+                    });
+                    displayTrucks(filtered);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    tableBody.innerHTML = '<tr><td colspan="6" class="no-results">Error connecting to server</td></tr>';
+                });
         }
         
         
